@@ -57,7 +57,7 @@ npm install
 ```
 
 3. Create a `.env` file with the following variables:
-```env
+```javascript
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/materialize-admin
 JWT_SECRET=your_jwt_secret_key_here
@@ -88,7 +88,7 @@ npm install
 ```
 
 3. Create a `.env.local` file with the following variables:
-```env
+```javascript
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
