@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: appdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    environment:
+      - PORT=12000
+      - BACKEND_DATABASE_URL=postgresql://postgres:postgres@db:5432/appdb
+      - JWT_SECRET=change-this-secret
+    depends_on:
+      - db
+    ports:
+      - "12000:12000"
+    volumes:
+      - ./backend:/app
+
+volumes:
+  db-data:
