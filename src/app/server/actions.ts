@@ -1,24 +1,27 @@
 /**
- * ! The server actions below are used to fetch the static data from the fake-db. If you're using an ORM
- * ! (Object-Relational Mapping) or a database, you can swap the code below with your own database queries.
+ * Server actions used to retrieve data for the dashboard. Some helpers now
+ * fetch data from the API defined in `API_URL` while others still use the
+ * static fake database.
  */
 
 'use server'
 
 // Data Imports
-import { db as eCommerceData } from '@/fake-db/apps/ecommerce'
 import { db as academyData } from '@/fake-db/apps/academy'
 import { db as vehicleData } from '@/fake-db/apps/logistics'
-import { db as invoiceData } from '@/fake-db/apps/invoice'
-import { db as userData } from '@/fake-db/apps/userList'
 import { db as permissionData } from '@/fake-db/apps/permissions'
 import { db as profileData } from '@/fake-db/pages/userProfile'
 import { db as faqData } from '@/fake-db/pages/faq'
 import { db as pricingData } from '@/fake-db/pages/pricing'
 import { db as statisticsData } from '@/fake-db/pages/widgetExamples'
 
+const API_URL = process.env.API_URL || 'http://localhost:12000/api'
+
 export const getEcommerceData = async () => {
-  return eCommerceData
+  const res = await fetch(`${API_URL}/products`, { cache: 'no-store' })
+  if (!res.ok) throw new Error('Failed to fetch products')
+  const products = await res.json()
+  return { products }
 }
 
 export const getAcademyData = async () => {
@@ -30,11 +33,15 @@ export const getLogisticsData = async () => {
 }
 
 export const getInvoiceData = async () => {
-  return invoiceData
+  const res = await fetch(`${API_URL}/invoices`, { cache: 'no-store' })
+  if (!res.ok) throw new Error('Failed to fetch invoices')
+  return await res.json()
 }
 
 export const getUserData = async () => {
-  return userData
+  const res = await fetch(`${API_URL}/users`, { cache: 'no-store' })
+  if (!res.ok) throw new Error('Failed to fetch users')
+  return await res.json()
 }
 
 export const getPermissionsData = async () => {
